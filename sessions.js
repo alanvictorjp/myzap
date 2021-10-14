@@ -75,7 +75,7 @@ module.exports = class Sessions {
                     session.CodeurlCode = urlCode;
                 },
                 statusFind: (statusSession, session) => {
-                    console.log('- Status da sessÃ£o:', statusSession);
+                    console.log('- Status da sessão:', statusSession);
                     console.log('- Session name: ', session);
                 },
                 folderNameToken: 'tokens',
@@ -118,6 +118,7 @@ module.exports = class Sessions {
                 disableWelcome: false,
                 updatesLog: true,
                 autoClose: 90000,
+				deviceName: 'SoftMED Technologies',
                 createPathFileToken: true,
                 waitForLogin: true,
 
@@ -165,7 +166,7 @@ module.exports = class Sessions {
 
     static async LogoutSession(sessionName) {
         var session = Sessions.getSession(sessionName);
-        if (session) { //sÃ³ adiciona se nÃ£o existir
+        if (session) { //só adiciona se não existir
             if (session.state != "LOGOUT") {
                 if (session.client)
                     await session.client.then(async client => {
@@ -189,7 +190,7 @@ module.exports = class Sessions {
 
     static async closeSession(sessionName) {
         var session = Sessions.getSession(sessionName);
-        if (session) { //sÃ³ adiciona se nÃ£o existir
+        if (session) { //só adiciona se não existir
             if (session.state != "CLOSED") {
                 if (session.client)
                     await session.client.then(async client => {
@@ -264,26 +265,27 @@ module.exports = class Sessions {
         var session = Sessions.getSession(params.sessionName);
         if (session) {
             if (session.state == "CONNECTED") {
-//                await session.client.then(async client => {
-//					if (!isNaN(params.number)) {
-//                    	console.log('#### escrevendo... =', params.text);
-//	                    return await client.startTyping(params.number + '@c.us');
-//					} else {
-//		                return { result: "error", message: session.state };
-//					}
-//                });
+/*
                 await session.client.then(async client => {
-                    console.log('#### send msg =', params);
-                    return await client.sendText(params.number + '@c.us', params.text);
+					if (!isNaN(params.number)) {
+                    	console.log('#### escrevendo... =', params.text);
+	                    return await client.startTyping(params.number + '@c.us');
+					}
                 });
-//                await session.client.then(async client => {
-//					if (!isNaN(params.number)) {
-//	                    return await client.stopTyping(params.number + '@c.us');
-//					} else {
-//		                return { result: "error", message: session.state };
-//					}
-//                });
-
+*/
+                await session.client.then(async client => {
+					if (!isNaN(params.number)) {
+	                    console.log('#### send msg =', params);
+    	                return await client.sendText(params.number + '@c.us', params.text);
+					}
+                });
+/*
+                await session.client.then(async client => {
+					if (!isNaN(params.number)) {
+	                    return await client.stopTyping(params.number + '@c.us');
+					}
+                });
+*/
                 return { result: "success" }
             } else {
                 return { result: "error", message: session.state };
@@ -374,7 +376,7 @@ module.exports = class Sessions {
     static async saveHook(req) {
         var sessionName = req.body.sessionName;
         /**
-         * Verifica se encontra sessÃ£o
+         * Verifica se encontra sessão
          */
         var foundSession = false;
         var foundSessionId = null;
@@ -385,11 +387,11 @@ module.exports = class Sessions {
                     foundSessionId = id;
                 }
             });
-        // Se nÃ£o encontrar retorna erro
+        // Se não encontrar retorna erro
         if (!foundSession) {
             return { result: "error", message: 'Session not found' };
         } else {
-            // Se encontrar cria variÃ¡veis
+            // Se encontrar cria variáveis
             var hook = req.body.hook;
             foundSession.hook = hook;
             Sessions.sessions[foundSessionId] = foundSession;
@@ -662,7 +664,7 @@ module.exports = class Sessions {
                 message: "NOTFOUND"
             };
         }
-    } //saber se o nÃºmero Ã© vÃ¡lido
+    } //saber se o número é válido
 
     static async checkNumberStatus(sessionName, number) {
         var session = Sessions.getSession(sessionName);
@@ -687,7 +689,7 @@ module.exports = class Sessions {
                 message: "NOTFOUND"
             };
         }
-    } //saber se o nÃºmero Ã© vÃ¡lido
+    } //saber se o número é válido
 
 
     static async getMessages(sessionName, number) {
@@ -713,7 +715,7 @@ module.exports = class Sessions {
                 message: "NOTFOUND"
             };
         }
-    } //receber o perfil do usuÃ¡rio
+    } //receber o perfil do usuário
 
     static async getNumberProfile(sessionName, number) {
         var session = Sessions.getSession(sessionName);
@@ -738,5 +740,5 @@ module.exports = class Sessions {
                 message: "NOTFOUND"
             };
         }
-    } //receber o perfil do usuÃ¡rio
+    } //receber o perfil do usuário
 }

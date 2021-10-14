@@ -45,9 +45,7 @@ app.post('/exec', async (req, res) => {
 
 app.get("/start", async (req, res, next) => {
     console.log("starting..." + req.query.sessionName);
-    var session = process.env.JSONBINIO_SECRET_KEY ?
-        await Sessions.start(req.query.sessionName, { jsonbinio_secret_key: process.env.JSONBINIO_SECRET_KEY, jsonbinio_bin_id: process.env.JSONBINIO_BIN_ID }) :
-        await Sessions.start(req.query.sessionName);
+    var session = await Sessions.start(req.query.sessionName);
     if (["CONNECTED", "QRCODE", "STARTING"].includes(session.state)) {
         res.status(200).json({ result: 'success', message: session.state });
     } else {
@@ -242,60 +240,12 @@ app.get("/getNumberProfile", async (req, res, next) => {
 
 
 app.get("/logout", async (req, res, next) => {
-    if (typeof(Sessions.options) != "undefined")  {
-        if (Sessions.options.jsonbinio_secret_key !== undefined) {//se informou secret key pra salvar na nuvem
-            console.log("limpando token na nuvem...");
-            //salva dados do token da sessÃ£o na nuvem
-            var data = JSON.stringify({ "nada": "nada" });
-            var config = {
-                method: 'put',
-                url: 'https://api.jsonbin.io/b/' + Sessions.options.jsonbinio_bin_id,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'secret-key': Sessions.options.jsonbinio_secret_key,
-                    'versioning': 'false'
-                },
-                data: data
-            };
-            await axios(config)
-                .then(function (response) {
-                    console.log(JSON.stringify(response.data));
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-        }
-    }
     var result = await Sessions.LogoutSession(req.query.sessionName);
     res.json(result);
 });//logout
 
 
 app.get("/close", async (req, res, next) => {
-    if (typeof(Sessions.options) != "undefined")  {
-        if (Sessions.options.jsonbinio_secret_key !== undefined) {//se informou secret key pra salvar na nuvem
-            console.log("limpando token na nuvem...");
-            //salva dados do token da sessÃ£o na nuvem
-            var data = JSON.stringify({ "nada": "nada" });
-            var config = {
-                method: 'put',
-                url: 'https://api.jsonbin.io/b/' + Sessions.options.jsonbinio_bin_id,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'secret-key': Sessions.options.jsonbinio_secret_key,
-                    'versioning': 'false'
-                },
-                data: data
-            };
-            await axios(config)
-                .then(function (response) {
-                    console.log(JSON.stringify(response.data));
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-        }
-    }
     var result = await Sessions.closeSession(req.query.sessionName);
     res.json(result);
 });//close
