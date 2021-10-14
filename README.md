@@ -1,3 +1,11 @@
+#### Este é uma cópia do myzap original desenvolvido por Bill Barsch.
+#### Nessa cópia, foi adicionado alguns métodos e removido algumas coisas.
+
+`- Removido opção de guardar token em nuvem`
+`- Removido arquivos referentes ao docker`
+`- Removido arquivos .sh para manuseio do docker`
+`- Removido lib venom-bot`
+
 ## Instalação
 `apt update -y && apt upgrade -y && apt install git curl wget lsof build-essential procps vim -y`
 
