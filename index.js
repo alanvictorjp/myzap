@@ -91,6 +91,23 @@ app.post("/sendHook", async function sendText(req, res, next) {
     res.json(result);
 });//sendText
 
+
+app.post("/archiveChat", async function archiveChat(req, res, next) {
+    var result = await Sessions.archiveChat(req);
+    res.json(result);
+});//sendText
+
+app.post("/deleteChat", async function deleteChat(req, res, next) {
+    var result = await Sessions.deleteChat(req);
+    res.json(result);
+});//sendText
+
+
+app.post("/sendListMessage", async function sendListMessage(req, res, next) {
+    var result = await Sessions.sendListMessage(req);
+    res.json(result);
+});//sendText
+
 app.post("/sendText", async function sendText(req, res, next) {
     var result = await Sessions.sendText(req);
     res.json(result);
@@ -191,11 +208,15 @@ app.get("/getMessages", async (req, res, next) => {
     res.json(result);
 });
 
+app.get("/getAllChats", async (req, res, next) => {
+    var result = await Sessions.getAllChats(req.body.sessionName);
+    res.json(result);
+}); //getallchats
 
 app.get("/clearChat", async (req, res, next) => {
     var result = await Sessions.clearChat(req.body.sessionName);
     res.json(result);
-}); //isConnected
+}); //clearchat
 
 app.get("/isConnected", async (req, res, next) => {
     var result = await Sessions.isConnected(req.body.sessionName);
